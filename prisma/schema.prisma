@@ -1,0 +1,162 @@
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Coupon {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  couponCode String
+  percent    Int
+  isActive   Boolean
+
+  expiryDate DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Banner {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  bannerLink String
+  imageUrl   String
+  isActive   Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String  @unique
+  imageUrl    String?
+  description String?
+  isActive    Boolean
+
+  products  Product[]
+  trainings Training[]
+
+  marketIds String[] @db.ObjectId
+  markets   Market[] @relation(fields: [marketIds], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Market {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String  @unique
+  title       String
+  description String
+  logoUrl     String
+  isActive    Boolean
+
+  categoryIds String[]   @db.ObjectId
+  categories  Category[] @relation(fields: [categoryIds], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Product {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  title             String
+  slug              String   @unique
+  description       String
+  imageUrl          String?
+  isActive          Boolean
+  sku               String?
+  barcode           String?
+  productCode       String?
+  unit              String?
+  productPrice      Float
+  salePrice         Float
+  isWholesale       Boolean
+  wholesalePrice    Float
+  wholesaleQuantity Int
+  productStock      Int
+  quantity          Int
+  tags              String[]
+
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId String   @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.ObjectId
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Training {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String  @unique
+  imageUrl    String?
+  description String?
+  content     String?
+  isActive    Boolean
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String   @db.ObjectId
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  FARMER
+  MODERATOR
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  password      String
+  emailVerified DateTime?
+
+  products Product[]
+  role     UserRole  @default(USER)
+
+  farmerProfile FarmerProfile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FarmerProfile {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  phone           String
+  email           String
+  farmerCode      String
+  profileImageUrl String?
+  isActive        Boolean
+
+  physicalAddress    String?
+  contactPerson      String?
+  contactPersonPhone String?
+  paymentTerms       String?
+  notes              String?
+
+  products String[]
+  mainCrop String
+  landSize Float
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
