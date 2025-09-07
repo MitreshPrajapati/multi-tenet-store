@@ -38,6 +38,7 @@ const NewFarmerForm = ({ user, updateData = {} }) => {
   function redirect() {
     router.push("/login");
   }
+  
   async function onSubmit(data) {
     const { name } = data;
     const farmerUniqueCode = generateUserUniqueCode("MVS", name);
