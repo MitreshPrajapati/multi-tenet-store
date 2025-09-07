@@ -12,15 +12,18 @@ import { useDispatch } from "react-redux";
 
 const CartProduct = ({ cartItem }) => {
   const dispatch = useDispatch();
+  
   function handleDeleteCartItem(id) {
     dispatch(removeFromCart(id));
     console.log(`Removing item with id: ${id} from cart`);
     toast.success(`Item removed from cart!`); // Show success message
   }
+  
   function handleIncrementQty(id) {
     dispatch(incrementQty(id));
     console.log(`Incrementing quantity for item with id: ${id}`);
   }
+  
   function handleDecrementQty(id) {
     dispatch(decrementQty(id));
     console.log(`Decrementing quantity for item with id: ${id}`);
@@ -28,7 +31,7 @@ const CartProduct = ({ cartItem }) => {
 
   return (
     <div className="flex border-b items-center justify-between border-slate-400 py-4 font-semibold text-sm">
-      <div className="flex gap-4 items-center">
+      <div className="w-1/3 flex gap-4 items-center">
         <Image
           src={cartItem.imageUrl || "/vegetables.png"}
           width={249}
@@ -42,25 +45,23 @@ const CartProduct = ({ cartItem }) => {
         </div>
       </div>
 
-      <div className="">
-        <div className="flex items-center h-fit">
-          <button
-            disabled={cartItem.quantity === 1}
-            onClick={() => handleDecrementQty(cartItem.id)}
-            className="border py-2 px-4 rounded-tl-lg rounded-bl-lg"
-          >
-            <Minus className="w-5 h-5" />
-          </button>
-          <span className="border border-l-0 border-r-0 py-2 h-auto px-8  ">
-            {cartItem.quantity}
-          </span>
-          <button
-            onClick={() => handleIncrementQty(cartItem.id)}
-            className="border py-2 px-4 rounded-tr-lg rounded-br-lg"
-          >
-            <Plus className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="w-1/3 flex items-center h-fit">
+        <button
+          disabled={cartItem.quantity === 1}
+          onClick={() => handleDecrementQty(cartItem.id)}
+          className="border py-2 px-4 rounded-tl-lg rounded-bl-lg"
+        >
+          <Minus className="w-5 h-5" />
+        </button>
+        <span className="border border-l-0 border-r-0 py-2 h-auto px-8  ">
+          {cartItem.quantity}
+        </span>
+        <button
+          onClick={() => handleIncrementQty(cartItem.id)}
+          className="border py-2 px-4 rounded-tr-lg rounded-br-lg"
+        >
+          <Plus className="w-5 h-5" />
+        </button>
       </div>
 
       <div className="flex gap-2 items-center">

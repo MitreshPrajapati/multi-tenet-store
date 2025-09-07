@@ -106,7 +106,7 @@ model Training {
   isActive    Boolean
 
   category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String   @db.ObjectId
+  categoryId String    @db.ObjectId
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -120,19 +120,31 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
+  email         String? @unique
   password      String
-  emailVerified DateTime?
+  emailVerified Boolean @default(false)
 
   products Product[]
   role     UserRole  @default(USER)
 
   farmerProfile FarmerProfile?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  verificationToken String?
+  profile           UserProfile?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  // userProfileId     String?      @db.ObjectId
+}
+
+model UserProfile {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @unique @db.ObjectId
+  dateOfBirth DateTime?
+  address     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FarmerProfile {

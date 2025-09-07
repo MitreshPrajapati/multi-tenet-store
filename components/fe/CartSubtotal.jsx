@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const CartSubtotal = ({ subtotal }) => {
+const CartSubtotal = ({ subtotal, totalPrice }) => {
   return (
     <div className="sm:col-span-4 col-span-full rounded-lg bg-white border border-gray-300 dark:bg-gray-700 dark:border-gray-700 dark:text-slate-100 overflow-hidden px-4 py-4 mb-4">
       <h2 className="text-2xl py-3 font-semibold">Cart Total</h2>
@@ -24,7 +24,7 @@ const CartSubtotal = ({ subtotal }) => {
       </p>
       <div className="flex justify-between items-center py-6">
         <span>Total</span>
-        <span>${subtotal}</span>
+        <span>${totalPrice}</span>
       </div>
 
       <Link

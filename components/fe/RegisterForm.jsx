@@ -27,6 +27,7 @@ export default function RegisterForm({ role = "USER" }) {
       console.log(data);
       setLoading(true);
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+     
       const response = await fetch(`${baseUrl}/api/users`, {
         method: "POST",
         headers: {
@@ -36,7 +37,7 @@ export default function RegisterForm({ role = "USER" }) {
       });
 
       const responseData = await response.json();
-      console.log(responseData);
+      // console.log(responseData);
       if (response.ok) {
         setLoading(false);
         toast.success("User Created Successfully");
@@ -44,8 +45,12 @@ export default function RegisterForm({ role = "USER" }) {
 
         if (role === "USER") {
           router.push("/");
-        } else if (role === "FARMER") {
-          router.push(`/onboarding/${responseData.data.id}`);
+        }
+        // else if (role === "FARMER") {
+        //   router.push(`/onboarding/${responseData.data.id}`);
+        // }
+        else {
+          router.push("/verify-email");
         }
       } else {
         setLoading(false);
@@ -134,7 +139,7 @@ export default function RegisterForm({ role = "USER" }) {
         </button>
       </div> */}
 
-      <p className="text-sm font-light text-gray-500 dark:text-gray-400 py-4">
+      <p className="text-sm font-light text-gray-500 dark:text-gray-400 pt-4">
         Already have an account?{" "}
         <Link
           href="/login"
@@ -143,6 +148,27 @@ export default function RegisterForm({ role = "USER" }) {
           Login
         </Link>
       </p>
+      {role === "USER" ? (
+        <p className="text-sm font-light text-gray-500 dark:text-gray-400 py-4">
+          Are you a Farmer?{" "}
+          <Link
+            href="/register-farmer"
+            className="font-medium text-purple-600 hover:underline dark:text-purple-500"
+          >
+            Register here
+          </Link>
+        </p>
+      ) : (
+        <p className="text-sm font-light text-gray-500 dark:text-gray-400 py-4">
+          Are you a User?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-purple-600 hover:underline dark:text-purple-500"
+          >
+            Register here
+          </Link>
+        </p>
+      )}
     </form>
   );
 }

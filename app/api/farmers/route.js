@@ -21,6 +21,29 @@ export async function POST(req) {
             paymentTerms,
             notes,
         } = await req.json();
+
+        const isExistingUser = await db.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
+
+        if (!isExistingUser) {
+            return NextResponse.json({
+                data: null,
+                message: `No user found.`
+            }, { status: 404 })
+        }
+        
+        const updatedUser = await db.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                emailVerified: true
+            }
+        })
+
         const newFarmer = await db.farmerProfile.create({
             data: {
                 userId,

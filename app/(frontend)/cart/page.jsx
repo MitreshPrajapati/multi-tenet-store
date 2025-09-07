@@ -13,6 +13,9 @@ const Cart = () => {
   const subtotal = cartItems
     .reduce((total, item) => total + item.salePrice * item.quantity, 0)
     .toFixed(2);
+  const tax = 0; // Assuming no tax for simplicity
+  const shipping = 50; // Assuming a fixed shipping cost of $50
+  const totalPrice = (Number(subtotal) + shipping + tax).toFixed(2); // Assuming $50 shipping fee
   // console.log("Cart Items:", subtotal);
   return (
     <>
@@ -21,7 +24,7 @@ const Cart = () => {
       {cartItems.length > 0 ? (
         <div className="grid grid-cols-12 gap-8">
           <CartItems cartItems={cartItems} />
-          <CartSubtotal subtotal={subtotal} />
+          <CartSubtotal subtotal={subtotal} totalPrice={totalPrice} />
         </div>
       ) : (
         <div className="flex justify-center min-h-screen items-center">
