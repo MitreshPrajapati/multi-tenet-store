@@ -38,7 +38,11 @@ export async function POST(req) {
             const userId = user.id;
             const linkText = "Verify Account";
             const redirectUrl = `onboarding/${userId}?token=${token}`;
-
+            const subject = `Account Verification - Multi-Ecommerce`;
+            const description =
+                ` Thank you, for Creating an Account with Us. We request you to click
+            on the link Below in order to Complete your onboarding process.
+            Thankyou.`;
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
@@ -48,13 +52,13 @@ export async function POST(req) {
             });
 
             const emailHtml = await render(
-                EmailTemplate({ name, redirectUrl, linkText })
+                EmailTemplate({ name, redirectUrl, linkText, description })
             );
 
             const info = await transporter.sendMail({
-                from: `"Auth System" <${process.env.SMTP_USER}>`,
+                from: `"Multi-Ecommerce" <${process.env.SMTP_USER}>`,
                 to: email,
-                subject: "Verify your Email",
+                subject: subject,
                 html: emailHtml,
             });
 

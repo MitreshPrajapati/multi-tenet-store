@@ -7,8 +7,7 @@ import Link from "next/link";
 import Slider from "react-slick";
 
 const HeroCarousel = ({ banners }) => {
-
-  const isInfinite = banners.length > 1 ? true : false;
+  const isInfinite = (banners?.length) > 1 ? true : false;
   var settings = {
     dots: true,
     infinite: isInfinite,
@@ -37,19 +36,18 @@ const HeroCarousel = ({ banners }) => {
         {...settings}
         // className=""
       >
-        {
-          banners?.map((banner, index) => (
+        {banners?.map((banner, index) => (
           // sliderRef = slider;
-           <Link href={banner?.link || "/"} key={banner.slug+index}>
-              <Image
-                src={banner.imageUrl || "/slider-1.jpg"}
-                width={712}
-                height={500}
-                className="w-full h-auto my-auto"
-                alt={banner.title}
-              />
-            </Link>
-          ))}
+          <Link href={banner?.link || "/"} key={banner.slug + index}>
+            <Image
+              src={banner.imageUrl || "/slider-1.jpg"}
+              width={712}
+              height={500}
+              className="w-full h-auto my-auto"
+              alt={banner.title}
+            />
+          </Link>
+        ))}
       </Slider>
 
       <div className="absolute w-full top-[40%] flex justify-between items-center">

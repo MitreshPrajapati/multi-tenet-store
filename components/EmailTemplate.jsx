@@ -10,6 +10,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { GithubIcon } from "lucide-react";
 import * as React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -18,12 +19,12 @@ export const EmailTemplate = ({
   name = "",
   redirectUrl = "/login",
   linkText,
+  subject,
+  description,
 }) => (
   <Html>
     <Head />
-    <Preview>
-      A fine-grained personal access token has been added to your account
-    </Preview>
+    <Preview>{subject}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
@@ -39,11 +40,7 @@ export const EmailTemplate = ({
           <Text style={text}>
             Hey <strong>{name}</strong>!
           </Text>
-          <Text style={text}>
-            Thank you, for Creating an Account with Us. We request you to click
-            on the link Below in order to Complete your onboarding process.
-            Thankyou
-          </Text>
+          <Text style={text}>{description}</Text>
 
           <Link style={button} href={`${baseUrl}/${redirectUrl}`}>
             {linkText}
@@ -55,8 +52,7 @@ export const EmailTemplate = ({
         </Text>
 
         <Text style={footer}>
-          Auth System By JB, Inc. ・88 Colin P Kelly Jr Street ・San Francisco,
-          CA 94107
+          Auth System By Mitresh, Inc. ・Kanjhawla Road ・Delhi, India
         </Text>
       </Container>
     </Body>

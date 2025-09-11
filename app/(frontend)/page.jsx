@@ -15,7 +15,7 @@ const Home = async () => {
   });
 
   const session = await getServerSession(authOptions);
-  console.log(session?.user);
+  // console.log(session?.user);
   return (
     <div className="min-h-screen">
       <Hero />

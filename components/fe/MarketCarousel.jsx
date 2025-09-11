@@ -15,14 +15,16 @@ const MarketCarousel = ({ markets }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: markets.length > 6 ? 6 : markets.length,
+    slidesToShow: 6,
+    // slidesToShow: (markets?.length) > 6 ? 6 : (markets?.length),
     slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: markets.length > 3 ? 3 : markets.length,
+          slidesToShow: 3,
+          // slidesToShow: markets.length > 3 ? 3 : markets.length,
           slidesToScroll: 1,
           infinite: true,
           dots: true,
@@ -31,7 +33,8 @@ const MarketCarousel = ({ markets }) => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: markets.length > 2 ? 2 : markets.length,
+          slidesToShow: 2,
+          // slidesToShow: markets.length > 2 ? 2 : markets.length,
           slidesToScroll: 1,
           initialSlide: 2,
         },

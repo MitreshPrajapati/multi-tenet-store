@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CircleDollarSign,
   ExternalLink,
+  HeartHandshake,
   LayoutGrid,
   LayoutList,
   LogOut,
@@ -24,18 +25,30 @@ import {
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { signOut, useSession } from "next-auth/react";
+import Loading from "@/app/loading";
 
 const Sidebar = ({ showSidebar }) => {
+  const router = useRouter();
+  const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
+  const { theme } = useTheme();
 
-  const catalogueLinks = [
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    return <Loading />;
+  }
+
+  const role = session?.user?.role;
+
+  let catalogueLinks = [
     {
       title: "Products",
       icon: Boxes,
@@ -62,7 +75,12 @@ const Sidebar = ({ showSidebar }) => {
       link: "/dashboard/banners",
     },
   ];
-  const sidebarLinks = [
+  let sidebarLinks = [
+    {
+      title: "Profile",
+      icon: Truck,
+      link: "/dashboard/profile",
+    },
     {
       title: "Customers",
       icon: User2,
@@ -110,9 +128,78 @@ const Sidebar = ({ showSidebar }) => {
     },
   ];
 
-  const [openMenu, setOpenMenu] = useState(false);
+  // if (role === "ADMIN") {
+  //   userLinks = sidebarLinks;
+  // }
+  if (role === "FARMER") {
+    sidebarLinks = [
+      {
+        title: "Customers",
+        icon: User2,
+        link: "/dashboard/customers",
+      },
+      {
+        title: "Markets",
+        icon: Warehouse,
+        link: "/dashboard/markets",
+      },
+      {
+        title: "Orders",
+        icon: Truck,
+        link: "/dashboard/orders",
+      },
+      {
+        title: "Community",
+        icon: Building2,
+        link: "/dashboard/community",
+      },
+      {
+        title: "Wallet",
+        icon: CircleDollarSign,
+        link: "/dashboard/wallet",
+      },
+      {
+        title: "Farmer Support",
+        icon: HeartHandshake,
+        link: "/dashboard/farmer-support",
+      },
+      {
+        title: "Settings",
+        icon: Settings,
+        link: "/dashboard/settings",
+      },
+      {
+        title: "Online Store",
+        icon: ExternalLink,
+        link: "/",
+      },
+    ];
+  } else if (role === "USER") {
+    sidebarLinks = [
+      {
+        title: "Orders",
+        icon: Truck,
+        link: "/dashboard/orders",
+      },
+      {
+        title: "Profile",
+        icon: Truck,
+        link: "/dashboard/profile",
+      },
+      {
+        title: "Online Store",
+        icon: ExternalLink,
+        link: "/",
+      },
+    ];
+    catalogueLinks = [];
+  }
 
-  const { theme } = useTheme();
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
+  };
+
   return (
     <div
       className={
@@ -151,33 +238,36 @@ const Sidebar = ({ showSidebar }) => {
           <span>Dashboard</span>
         </Link>
 
-        <Collapsible>
-          <CollapsibleTrigger onClick={() => setOpenMenu(!openMenu)}>
-            <button className="flex items-center space-x-6 px-6 py-2  ">
-              <div className="flex items-center space-x-3 ">
-                <Slack />
-                <span>Catalogue</span>
-              </div>
-              {openMenu ? <ChevronDown /> : <ChevronRight className="" />}
-            </button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pl-8 bg-slate-100 dark:bg-slate-800 py-4 px-3 mb-2 mx-4 rounded-lg">
-            {catalogueLinks.map((item, index) => (
-              <Link
-                key={index}
-                href={item.link}
-                className={
-                  pathname === item.link
-                    ? "flex items-center space-x-3 py-2 text-sm text-green-500"
-                    : "flex items-center space-x-3 py-2 text-sm"
-                }
-              >
-                <item.icon />
-                <span>{item.title}</span>
-              </Link>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+        {catalogueLinks.length > 0 && (
+          <Collapsible>
+            <CollapsibleTrigger onClick={() => setOpenMenu(!openMenu)}>
+              <button className="flex items-center space-x-6 px-6 py-2  ">
+                <div className="flex items-center space-x-3 ">
+                  <Slack />
+                  <span>Catalogue</span>
+                </div>
+                {openMenu ? <ChevronDown /> : <ChevronRight />}
+              </button>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent className="pl-8 bg-slate-100 dark:bg-slate-800 py-4 px-3 mb-2 mx-4 rounded-lg">
+              {catalogueLinks?.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.link}
+                  className={
+                    pathname === item.link
+                      ? "flex items-center space-x-3 py-2 text-sm text-green-500"
+                      : "flex items-center space-x-3 py-2 text-sm"
+                  }
+                >
+                  <item.icon />
+                  <span>{item.title}</span>
+                </Link>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
 
         {sidebarLinks?.map((item, index) => (
           <Link
@@ -201,12 +291,15 @@ const Sidebar = ({ showSidebar }) => {
           </button>
         </div> */}
       </div>
-        <div className="px-6 pb-2">
-          <button className="flex items-center space-x-3 px-6 py-2 bg-green-500 rounded-lg border-l-4 border-green-600 ">
-            <LogOut className="text-white" />
-            <span className="text-white">Logout</span>
-          </button>
-        </div>
+      <div className="px-6 pb-2">
+        <button
+          onClick={handleLogout}
+          className="flex items-center space-x-3 px-6 py-2 bg-green-500 rounded-lg border-l-4 border-green-600 "
+        >
+          <LogOut className="text-white" />
+          <span className="text-white">Logout</span>
+        </button>
+      </div>
     </div>
   );
 };
