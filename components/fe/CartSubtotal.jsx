@@ -27,12 +27,14 @@ const CartSubtotal = ({ subtotal, totalPrice }) => {
         <span>${totalPrice}</span>
       </div>
 
-      <Link
-        href="/"
-        className="bg-gray-300 text-slate-800 font-normal rounded-lg w-full py-2 px-4 mb-6"
-      >
-        Continue to Payment
-      </Link>
+      <div className="mt-4">
+        <Link
+          href="/checkout"
+          className="bg-green-500 text-white font-normal rounded-lg w-full py-2 px-6 my-6"
+        >
+          Continue to Checkout
+        </Link>
+      </div>
     </div>
   );
 };

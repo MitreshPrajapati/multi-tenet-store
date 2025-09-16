@@ -92,8 +92,9 @@ model Product {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @db.ObjectId
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  orderItems OrderItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?   @updatedAt
 }
 
 model Training {
@@ -133,6 +134,7 @@ model User {
 
   verificationToken String?
   profile           UserProfile?
+  orders            Order[]
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   // userProfileId     String?      @db.ObjectId
@@ -171,4 +173,44 @@ model FarmerProfile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId    String @db.ObjectId
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+
+  streetAddress String
+  city          String
+  country       String
+  zipcode       String
+
+  shippingCost  Float
+  paymentMethod String
+
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // orderItemId String      @db.ObjectId
+}
+
+model OrderItem {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+
+  quantity Int
+  price    Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
