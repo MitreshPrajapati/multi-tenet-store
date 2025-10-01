@@ -102,6 +102,11 @@ const Sidebar = ({ showSidebar }) => {
       link: "/dashboard/orders",
     },
     {
+      title: "Sales",
+      icon: Truck,
+      link: "/dashboard/sales",
+    },
+    {
       title: "Our Staff",
       icon: Users,
       link: "/dashboard/staff",
@@ -149,6 +154,11 @@ const Sidebar = ({ showSidebar }) => {
         link: "/dashboard/orders",
       },
       {
+        title: "Sales",
+        icon: Truck,
+        link: "/dashboard/sales",
+      },
+      {
         title: "Community",
         icon: Building2,
         link: "/dashboard/community",
@@ -177,7 +187,7 @@ const Sidebar = ({ showSidebar }) => {
   } else if (role === "USER") {
     sidebarLinks = [
       {
-        title: "Orders",
+        title: "My Orders",
         icon: Truck,
         link: "/dashboard/orders",
       },
@@ -232,7 +242,7 @@ const Sidebar = ({ showSidebar }) => {
       <div className="space-y-3 flex flex-col mt-12 lg:h-[calc(100vh-220px)] overflow-y-scroll scroll-smooth">
         <Link
           href="/dashboard"
-          className="flex items-center space-x-3 px-6 py-2 border-l-4 border-green-500 "
+          className={`${pathname === "/dashboard" ? "border-l-4 border-green-500 text-green-500" : ""} flex items-center space-x-3 px-6 py-2 `}
         >
           <LayoutGrid />
           <span>Dashboard</span>
@@ -255,11 +265,8 @@ const Sidebar = ({ showSidebar }) => {
                 <Link
                   key={index}
                   href={item.link}
-                  className={
-                    pathname === item.link
-                      ? "flex items-center space-x-3 py-2 text-sm text-green-500"
-                      : "flex items-center space-x-3 py-2 text-sm"
-                  }
+                  className={`
+                   ${pathname === item.link && "text-green-500"} flex items-center space-x-3 py-2 text-sm `}
                 >
                   <item.icon />
                   <span>{item.title}</span>

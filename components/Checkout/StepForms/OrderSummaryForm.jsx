@@ -46,7 +46,7 @@ export default function OrderSummaryForm() {
         console.log("order>>>>", responseData);
         toast.success(`Order Created Successfully`);
 
-        router.push("/order-confirmation");
+        router.push(`/order-confirmation/${responseData.id}`);
       } else {
         setLoading(false);
         toast.error("Something Went wrong");
@@ -55,8 +55,7 @@ export default function OrderSummaryForm() {
       setLoading(false);
       console.log(error);
     }
-    // makePostRequest(setLoading, "api/orders", data, "Order", reset,  );
-    // console.log(combinedData);
+    // console.log(data);
   }
 
   async function handlePrevious() {

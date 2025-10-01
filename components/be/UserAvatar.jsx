@@ -16,7 +16,7 @@ import getInitials from "@/lib/generateInitials";
 
 export const UserAvatar = ({ user = {} }) => {
   const router = useRouter();
-  const { name, image } = user;
+  const { name, image, role } = user;
 
   const handleLogout = async () => {
     await signOut();
@@ -36,7 +36,7 @@ export const UserAvatar = ({ user = {} }) => {
               className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 p-2 flex justify-center items-center rounded-full object-cover bg-slate-600 shadow-md border border-slate-600">
+            <div className="w-10 h-10 p-4 flex justify-center items-center rounded-full object-cover bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-600">
               {getInitials(name)}
             </div>
           )}
@@ -60,6 +60,17 @@ export const UserAvatar = ({ user = {} }) => {
             <span>Edit Profile</span>
           </Link>
         </DropdownMenuItem>
+        {role === "USER" && (
+          <DropdownMenuItem>
+            <Link
+              href={"/dashboard/orders"}
+              className="flex items-center space-x-2"
+            >
+              <Settings className="mr-2 w-4 h-4 rounded-lg" />
+              <span>My Orders</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem>
           <button
             onClick={handleLogout}

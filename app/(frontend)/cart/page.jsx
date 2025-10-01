@@ -16,7 +16,7 @@ const Cart = () => {
   const tax = 0; // Assuming no tax for simplicity
   const shipping = 50; // Assuming a fixed shipping cost of $50
   const totalPrice = (Number(subtotal) + shipping + tax).toFixed(2); // Assuming $50 shipping fee
-  // console.log("Cart Items:", subtotal);
+  console.log("Cart Items:", cartItems);
   return (
     <>
       <Breadcrumb />

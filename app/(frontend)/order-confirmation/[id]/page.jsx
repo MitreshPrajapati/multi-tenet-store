@@ -1,12 +1,15 @@
+import { getData } from "@/lib/getData";
+import { Item } from "@radix-ui/react-dropdown-menu";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-export default function OrderConfirmation() {
-  const orderId = '68c95121981388daa553dbd3';
-
-
-
+export default async function page({ params: { id } }) {
+  const order = await getData(`orders/${id}`);
+  const { orderItems } = order;
+  const subTotal = orderItems
+    ?.reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .toFixed(2);
   return (
     <section className="py-12 dark:bg-slate-950 bg-slate-50 sm:py-16 lg:py-20">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-5xl">
@@ -73,7 +76,7 @@ export default function OrderConfirmation() {
 
                   <div className="flow-root mt-8">
                     <ul className="divide-y divide-gray-200 -my-7">
-                      {orderItems.length > 0 &&
+                      {orderItems &&
                         orderItems.map((item, i) => {
                           return (
                             <li

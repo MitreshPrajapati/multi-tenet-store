@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -20,7 +20,7 @@ export default function CartBanner() {
               <ShoppingBag className="w-6 h-6" />
             </div>
             <p className="ml-3 text-base font-normal text-gray-900">
-              You have {cartItems?.length} items in cart. Sub total is
+              You have {cartItems?.length} items in cart. Sub total is {" "}
               <span className="font-bold">${subtotal}</span>
             </p>
           </div>

@@ -10,6 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+  FARMER
+  MODERATOR
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
 model Coupon {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   title      String
@@ -93,6 +108,7 @@ model Product {
   userId String @db.ObjectId
 
   orderItems OrderItem[]
+  sales      Sale[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime?   @updatedAt
 }
@@ -113,13 +129,6 @@ model Training {
   updatedAt DateTime? @updatedAt
 }
 
-enum UserRole {
-  ADMIN
-  USER
-  FARMER
-  MODERATOR
-}
-
 model User {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -138,6 +147,7 @@ model User {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   // userProfileId     String?      @db.ObjectId
+  sales             Sale[]
 }
 
 model UserProfile {
@@ -176,7 +186,8 @@ model FarmerProfile {
 }
 
 model Order {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber String
 
   userId    String @db.ObjectId
   firstName String
@@ -193,10 +204,14 @@ model Order {
   paymentMethod String
 
   orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderStatus OrderStatus @default(PROCESSING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id])
   // orderItemId String      @db.ObjectId
+  sales Sale[]
 }
 
 model OrderItem {
@@ -204,13 +219,38 @@ model OrderItem {
 
   orderId   String @db.ObjectId
   productId String @db.ObjectId
+  vendorId  String @db.ObjectId
 
   quantity Int
   price    Float
+  title    String
+  imageUrl String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   order   Order   @relation(fields: [orderId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+}
+
+model Sale {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+  vendorId  String @db.ObjectId
+
+  productTitle    String
+  productImage    String
+  productPrice    Float
+  productQuantity Int
+
+  total     Float
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  vendor  User    @relation(fields: [vendorId], references: [id])
 }
