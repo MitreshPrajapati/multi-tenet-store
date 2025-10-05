@@ -15,21 +15,21 @@ const Page = async () => {
 
   const { role, id } = session?.user;
 
-  const coupons = await getData("coupons");
+  const sales = await getData("sales");
 
-  const farmerCoupons = coupons?.filter((coupon) => coupon.vendorId === id);;
+  const farmerSales = sales?.filter((sale) => sale.vendorId === id);
   // if (role === "FARMER" && coupons) {
   //   farmerCoupons = coupons?.filter((coupon) => coupon.vendorId === id);
   // }
 
   return (
     <div className="w-full h-screen dark:text-slate-50 text-slate-800 ">
-      <PageHeader
+      {/* <PageHeader
         title="Coupons"
         linkTitle="Add Coupons"
         href="/dashboard/coupons/new"
         icon={<Plus />}
-      />
+      /> */}
 
       <div className="py-6 px-2">
         {/* {role === "ADMIN" ? (
@@ -38,7 +38,7 @@ const Page = async () => {
           <DataTable data={farmerCoupons} columns={columns} />
         )} */}
         <DataTable
-          data={role === "ADMIN" ? coupons : farmerCoupons}
+          data={role === "ADMIN" ? sales : farmerSales}
           columns={columns}
         />
       </div>

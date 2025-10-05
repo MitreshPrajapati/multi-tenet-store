@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
-        const { title, couponCode, expiryDate, percent, isActive } = await req.json();
+        const { title, couponCode, expiryDate, percent, isActive, vendorId } = await req.json();
 
         const newCoupon = await db.coupon.create({
             data: {
@@ -12,6 +12,7 @@ export async function POST(req) {
                 percent: Number(percent),
                 expiryDate,
                 isActive,
+                vendorId,
             }
         })
 

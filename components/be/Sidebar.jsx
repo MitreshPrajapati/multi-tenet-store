@@ -148,11 +148,11 @@ const Sidebar = ({ showSidebar }) => {
         icon: Warehouse,
         link: "/dashboard/markets",
       },
-      {
-        title: "Orders",
-        icon: Truck,
-        link: "/dashboard/orders",
-      },
+      // {
+      //   title: "Orders",
+      //   icon: Truck,
+      //   link: "/dashboard/orders",
+      // },
       {
         title: "Sales",
         icon: Truck,
@@ -182,6 +182,18 @@ const Sidebar = ({ showSidebar }) => {
         title: "Online Store",
         icon: ExternalLink,
         link: "/",
+      },
+    ];
+    catalogueLinks = [
+      {
+        title: "Products",
+        icon: Boxes,
+        link: "/dashboard/products",
+      },
+      {
+        title: "Coupons",
+        icon: ScanSearch,
+        link: "/dashboard/coupons",
       },
     ];
   } else if (role === "USER") {

@@ -32,6 +32,9 @@ model Coupon {
   percent    Int
   isActive   Boolean
 
+  user     User   @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vendorId String @db.ObjectId
+
   expiryDate DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -137,6 +140,7 @@ model User {
   emailVerified Boolean @default(false)
 
   products Product[]
+  coupons  Coupon[]
   role     UserRole  @default(USER)
 
   farmerProfile FarmerProfile?

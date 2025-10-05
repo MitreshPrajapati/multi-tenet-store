@@ -36,6 +36,11 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("file url", file.url, metadata);
     }),
+  customerProfileImageUploader: f({ image: { maxFileSize: "1MB" } })
+    // Set permissions and file types for this FileRoute
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("file url", file.url, metadata);
+    }),
 
   trainingImageUploader: f({ image: { maxFileSize: "1MB" } })
     // Set permissions and file types for this FileRoute

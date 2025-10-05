@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import SubmitButton from "@/components/FormInput/SubmitButton";
 import TextInput from "@/components/FormInput/TextInput";
 import ToggleInput from "@/components/FormInput/ToggleInput";
@@ -8,11 +9,20 @@ import { convertIsoDateToNormal } from "@/lib/convertIsoDateToNormal";
 import { generateCouponCode } from "@/lib/generateCouponCode";
 import { generateISOFormatedDate } from "@/lib/generateISOFormatedDate";
 import { generateSlug } from "@/lib/generateSlug";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const CouponForm = ({ updatedData = {} }) => {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <Loading />;
+  }
+
+  const vendorId = session?.user?.id;
+
   const expiryDateNormal = convertIsoDateToNormal(updatedData.expiryDate);
   updatedData.expiryDate = expiryDateNormal;
   const id = updatedData?.id ?? "";
@@ -38,6 +48,7 @@ const CouponForm = ({ updatedData = {} }) => {
   }
 
   async function onSubmit(data) {
+    data.vendorId = vendorId;
     const slug = await generateSlug(data.title);
     data.slug = slug;
 
