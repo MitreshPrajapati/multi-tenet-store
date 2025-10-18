@@ -20,6 +20,8 @@ const NewProduct = async () => {
       title: category.title,
     };
   });
+
+  
   
   return (
     <NewProductForm categories={categories} farmers={farmers} />

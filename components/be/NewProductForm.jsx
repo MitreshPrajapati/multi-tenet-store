@@ -17,11 +17,13 @@ import ToggleInput from "@/components/FormInput/ToggleInput";
 import { makePostRequest, makePutRequest } from "@/lib/apiRequest";
 import { generateSlug } from "@/lib/generateSlug";
 import { generateUserUniqueCode } from "@/lib/generateUserCode";
+import MultipleImageInput from "../FormInput/MultipleImageInput";
+import FormHeader from "./FormHeader";
 
 const NewProductForm = ({ updateData = {}, farmers, categories }) => {
   const id = updateData?.id ?? "";
   const initialImageUrl = updateData?.imageUrl ?? "";
-  const [imageUrl, setImageUrl] = useState(initialImageUrl);
+  // const [imageUrl, setImageUrl] = useState(initialImageUrl);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(updateData.tags || []);
 
@@ -70,12 +72,13 @@ const NewProductForm = ({ updateData = {}, farmers, categories }) => {
     router.push("/dashboard/products");
   }
 
+  const [productImages, setProductImages] = useState(updateData.productImages || []);
   async function onSubmit(data) {
     const slug = await generateSlug(data.title);
     const productCode = generateUserUniqueCode("MVS-FP", data.title);
     data.slug = slug;
     data.productCode = productCode;
-    data.imageUrl = imageUrl;
+    data.productImages = productImages;
     data.tags = tags;
     data.quantity = 1;
     data.isActive = isActive;
@@ -99,13 +102,14 @@ const NewProductForm = ({ updateData = {}, farmers, categories }) => {
         redirect
       );
     }
-    setImageUrl("");
+    // setImageUrl("");
+    setProductImages([]);
     setTags([]);
   }
 
   return (
     <div>
-      {/* <FormHeader title={"New Product"} /> */}
+      <FormHeader title={"New Product"} />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-4xl bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-slate-700 dark:border-slate-600 mx-auto my-8"
@@ -225,11 +229,17 @@ const NewProductForm = ({ updateData = {}, farmers, categories }) => {
             </>
           ) : null}
 
-          <ImageInput
+          {/* <ImageInput
             label="Product Image"
             imageUrl={imageUrl}
             setImageUrl={setImageUrl}
             endpoint="productImageUploader"
+          /> */}
+          <MultipleImageInput
+            label="Product Images"
+            imageUrls={productImages}
+            setImageUrls={setProductImages}
+            endpoint="multipleProductsUploader"
           />
         </div>
 

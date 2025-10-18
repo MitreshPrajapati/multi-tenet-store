@@ -5,22 +5,21 @@ import React from "react";
 
 const SidebarCategories = async () => {
   const categories = await getData("categories");
-  // if(!categories){
-  //   return <div className="hidden sm:col-span-3 sm:block border border-gray-200 dark:border-gray-700 text-slate-800 bg-green-100 rounded-md overflow-hidden">
+  const categoriesWithItems = categories?.filter(
+    (category) => category.products && category.products.length > 0
+  );
 
-  //   </div>
-  // }
   return (
     <div className="hidden sm:col-span-3 sm:block border border-gray-200 dark:border-gray-700 text-slate-800 bg-green-100 rounded-md overflow-hidden">
       <h2 className="bg-slate-100 dark:bg-slate-700 py-4 px-6 dark:text-slate-50 font-bold border border-b-2 dark:border-slate-700">
         Shop By Category ({categories?.length})
       </h2>
       <div className="py-3 px-6 h-[300px] overflow-y-scroll scroll-smooth no-scrollbar ">
-        {categories &&
-          categories?.map((category, index) => (
+        {categoriesWithItems &&
+          categoriesWithItems?.map((category, idx) => (
             <Link
               key={category.slug}
-              href={"/"}
+              href={`/category/${category.slug}`}
               className="flex items-center gap-3 hover:bg-slate-100 duration-500 transition-all rounded-md my-2 rounded-tl-full rounded-bl-full rounded-tr-full rounded-br-full"
             >
               <Image

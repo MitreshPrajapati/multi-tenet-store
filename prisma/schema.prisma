@@ -90,6 +90,7 @@ model Product {
   slug              String   @unique
   description       String
   imageUrl          String?
+  productImages     String[]
   isActive          Boolean
   sku               String?
   barcode           String?
@@ -155,10 +156,23 @@ model User {
 }
 
 model UserProfile {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String    @unique @db.ObjectId
-  dateOfBirth DateTime?
-  address     String?
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
+
+  dateOfBirth  DateTime?
+  username     String?   @unique
+  // address     String?
+  name         String?
+  firstName    String?
+  lastName     String?
+  email        String?
+  phone        String?
+  profileImage String?
+
+  streetAddress String?
+  city          String?
+  country       String?
+  zipcode       String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -13,12 +13,11 @@ import SubmitButton from "@/components/FormInput/SubmitButton";
 import ToggleInput from "@/components/FormInput/ToggleInput";
 import AddArrayItems from "@/components/FormInput/AddArrayItems";
 
-const CustomerForm = ({ user, updateData = {} }) => {
-  const id = updateData?.id ?? "";
-  const initialImageUrl = updateData?.profileImageUrl ?? "";
+const CustomerForm = ({ user }) => {
+  console.log("Customer Form User", user);
+  const initialImageUrl = user.profileImage ?? "";
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]);
 
   const {
     register,
@@ -28,46 +27,31 @@ const CustomerForm = ({ user, updateData = {} }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      isActive: true,
       ...user,
-      ...updateData,
     },
   });
 
-  const isActive = watch("isActive");
+  // const isActive = watch("isActive");
   const router = useRouter();
   function redirect() {
-    router.push("/login");
+    router.push("/dashboard/customers");
   }
 
   async function onSubmit(data) {
-    const { name } = data;
-    const CustomerUniqueCode = generateUserUniqueCode("MVS", name);
-    data.CustomerCode = CustomerUniqueCode;
-    data.profileImageUrl = imageUrl;
-    data.products = products;
-    data.isActive = isActive;
-    data.userId = updateData.id || user.id;
+    data.userId = user.id;
+    data.profileImage = imageUrl;
 
     console.log("CustomerProfile>>>", data);
-    if (id) {
-      makePutRequest(
-        setLoading,
-        `api/Customers/${id}`,
-        data,
-        "Customer Profile",
-        redirect
-      );
-    } else {
-      makePostRequest(
-        setLoading,
-        "api/Customers",
-        data,
-        "Customer Profile",
-        reset,
-        redirect
-      );
-    }
+    // if (id) {
+    makePutRequest(
+      setLoading,
+      `api/customers/${id}`,
+      data,
+      "Customer Profile",
+      redirect,
+      reset
+    );
+    // }
 
     setImageUrl("");
   }
@@ -80,6 +64,36 @@ const CustomerForm = ({ user, updateData = {} }) => {
         Personal Details
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 border-b-2 pb-10">
+        <TextInput
+          label="Full Name"
+          name="name"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+        <TextInput
+          label="Username"
+          name="username"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+        <TextInput
+          label="Date of Birth"
+          name="dateOfBirth"
+          type="date"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+        <TextInput
+          label="Email Address"
+          name="email"
+          type="email"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
         <TextInput
           label="First Name"
           name="firstName"
@@ -94,14 +108,7 @@ const CustomerForm = ({ user, updateData = {} }) => {
           errors={errors}
           className="w-full"
         />
-        <TextInput
-          label="Email Address"
-          name="email"
-          type="email"
-          register={register}
-          errors={errors}
-          className="w-full"
-        />
+
         <TextInput
           label="Phone Number"
           name="phone"
@@ -153,10 +160,8 @@ const CustomerForm = ({ user, updateData = {} }) => {
 
       <SubmitButton
         isLoading={loading}
-        title={id ? "Update Customer" : "Create Customer"}
-        loadingButtonTitle={
-          id ? "Updating Customer..." : "Creating Customer..."
-        }
+        title={"Update Customer"}
+        loadingButtonTitle={"Updating Customer..."}
       />
     </form>
   );

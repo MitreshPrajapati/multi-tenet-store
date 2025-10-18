@@ -17,20 +17,21 @@ export async function POST(req) {
                 message: "Product already exists",
             }, { status: 409 })
         }
-        
+
 
         const newProduct = await db.product.create({
             data: {
                 title: productData.title,
                 slug: productData.slug,
-                imageUrl: productData.imageUrl,
+                imageUrl: productData.productImages[0] || null,
+                productImages: productData.productImages,
                 description: productData.description,
                 isActive: productData.isActive,
                 sku: productData.sku,
                 barcode: productData.barcode,
                 productCode: productData.productCode,
                 unit: productData.unit,
-                
+
                 productPrice: parseFloat(productData.productPrice),
                 salePrice: parseFloat(productData.salePrice),
                 wholesalePrice: parseFloat(productData.wholesalePrice),
@@ -38,10 +39,10 @@ export async function POST(req) {
                 productStock: parseInt(productData.productStock),
                 quantity: parseInt(productData.quantity),
                 tags: productData.tags,
-                
+
                 categoryId: productData.categoryId,
                 userId: productData.farmerId,
-                
+
                 isWholesale: productData.isWholesale,
             }
         })
@@ -58,12 +59,40 @@ export async function POST(req) {
 
 
 export async function GET(req) {
+    const { searchParams } = new URL(req.url);
+    const sort = searchParams.get('sort');
+    const categoryId = searchParams.get('categoryId');
+    console.log("categoryId", categoryId, searchParams)
+    let products = {};
+
     try {
-        const products = await db.product.findMany({
-            orderBy: {
-                createdAt: "desc",
+        if (categoryId) {
+            if (sort) {
+                products = await db.product.findMany({
+                    orderBy: {
+                        salePrice: sort === "asc" ? "asc" : "desc",
+                    },
+                    where: {
+                        categoryId
+                    }
+                });
+            } else {
+                products = await db.product.findMany({
+                    orderBy: {
+                        createdAt: "desc",
+                    },
+                    where: {
+                        categoryId
+                    }
+                });
             }
-        });
+        }
+
+        // const products = await db.product.findMany({
+        //     orderBy: {
+        //         createdAt: "desc",
+        //     }
+        // });
         return NextResponse.json(products);
     } catch (error) {
         return NextResponse.json({
