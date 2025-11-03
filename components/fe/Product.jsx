@@ -40,7 +40,7 @@ const Product = ({ product }) => {
 
         <div className="flex justify-between  items-center gap-2  mt-4">
           <span className="text-slate-800 dark:text-slate-800">
-            INR: {product.productPrice}
+            INR: {product.salePrice}
           </span>
           <button
             onClick={() => handleAddToCart()}

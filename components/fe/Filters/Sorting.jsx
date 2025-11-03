@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 
 export default function Sorting({ title, slug }) {
   // console.log(title, products, "from SORTING")
   const pathname = usePathname();
-
+  const sort = useSearchParams().get("sort");
   const sortingLinks = [
     {
       title: "Relevance",
@@ -30,7 +30,9 @@ export default function Sorting({ title, slug }) {
         <p>Sort by:</p>
         <div className="flex items-center">
           {sortingLinks?.map((link, idx) => {
-            const actualPath = `${pathname}${link.params}`;
+            const actualPath = `${pathname}${sort ? "?sort=" + sort : ""}`;
+            
+            console.log(actualPath);
             return (
               <Link
                 key={idx}
@@ -45,18 +47,6 @@ export default function Sorting({ title, slug }) {
               </Link>
             );
           })}
-          {/* <Link
-            className={`${pathname === href ? "border-green-400 bg-slate-800 px-2 py-1 text-green-500" : " border-slate-500 px-2 py-1"} border`}
-            href={relevance}
-          >
-            Relevance
-          </Link>
-          <Link className="border border-slate-500 px-2 py-1 " href={"#"}>
-            Price - High to Low
-          </Link>
-          <Link className="border border-slate-500 px-2 py-1 " href={"#"}>
-            Price - Low to High
-          </Link> */}
         </div>
       </div>
     </div>

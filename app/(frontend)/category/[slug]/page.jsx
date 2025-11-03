@@ -3,12 +3,14 @@ import { getData } from "@/lib/getData";
 import React from "react";
 
 export default async function page({ params: { slug }, searchParams }) {
-  const { sort } = searchParams;
+  const { sort, min, max } = searchParams;
   const category = await getData(`categories/filter/${slug}`);
-  
+
   let products;
   if (sort) {
-    products = await getData(`products?categoryId=${category.id}&sort=${sort}`);
+    products = await getData(
+      `products?categoryId=${category.id}&sort=${sort}${max ? "&max=" + max : ""}${min ? "&min=" + min : ""}`
+    );
   } else {
     products = await getData(`products?categoryId=${category.id}`);
   }

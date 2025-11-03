@@ -62,37 +62,55 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const sort = searchParams.get('sort');
     const categoryId = searchParams.get('categoryId');
+    const min = searchParams.get('min');
+    const max = searchParams.get('max');
+    const pageSize = searchParams.get('pageSize') || 2;
+    const page = searchParams.get('page') || 1;
+
     console.log("categoryId", categoryId, searchParams)
+    let where = {
+        categoryId
+    };
     let products = {};
 
+    if (min && max) {
+        where.salePrice = {
+            gte: parseFloat(min),
+            lte: parseFloat(max)
+        }
+    } else if (max) {
+        where.salePrice = {
+            lte: parseFloat(max)
+        }
+    } else if (min) {
+        where.salePrice = {
+            gte: parseFloat(min)
+        }
+    }
+
     try {
-        if (categoryId) {
+        if (categoryId && page) {
             if (sort) {
                 products = await db.product.findMany({
                     orderBy: {
                         salePrice: sort === "asc" ? "asc" : "desc",
                     },
-                    where: {
-                        categoryId
-                    }
+                    where,
+                    skip: (parseInt(page) - 1) * parseInt(pageSize),
+                    take: parseInt(pageSize),
                 });
             } else {
                 products = await db.product.findMany({
+                    where,
+                    skip: (parseInt(page) - 1) * parseInt(pageSize),
+                    take: parseInt(pageSize),
                     orderBy: {
                         createdAt: "desc",
-                    },
-                    where: {
-                        categoryId
                     }
                 });
             }
         }
 
-        // const products = await db.product.findMany({
-        //     orderBy: {
-        //         createdAt: "desc",
-        //     }
-        // });
         return NextResponse.json(products);
     } catch (error) {
         return NextResponse.json({
