@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 
-export default function Sorting({ title, slug }) {
+export default function Sorting({ title, slug, isSearch = false }) {
   // console.log(title, products, "from SORTING")
   const pathname = usePathname();
   const sort = useSearchParams().get("sort");
@@ -25,13 +25,15 @@ export default function Sorting({ title, slug }) {
   return (
     <div className="flex items-center justify-between">
       {/* <h2 className="text-2xl">Serarch Results - Electronics</h2> */}
-      <h2 className="text-2xl font-medium ">{title}</h2>
+      <h2 className="text-2xl font-medium ">
+        {isSearch && "Search Results -"} {title}
+      </h2>
       <div className="flex items-center gap-3 text-sm">
         <p>Sort by:</p>
         <div className="flex items-center">
           {sortingLinks?.map((link, idx) => {
             const actualPath = `${pathname}${sort ? "?sort=" + sort : ""}`;
-            
+
             console.log(actualPath);
             return (
               <Link

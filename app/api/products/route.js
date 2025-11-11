@@ -1,4 +1,5 @@
 import db from "@/lib/db";
+import { CaseSensitive } from "lucide-react";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -64,6 +65,7 @@ export async function GET(req) {
     const categoryId = searchParams.get('categoryId');
     const min = searchParams.get('min');
     const max = searchParams.get('max');
+    const search = searchParams.get('search');
     const pageSize = searchParams.get('pageSize') || 2;
     const page = searchParams.get('page') || 1;
 
@@ -71,7 +73,6 @@ export async function GET(req) {
     let where = {
         categoryId
     };
-    let products = {};
 
     if (min && max) {
         where.salePrice = {
@@ -88,8 +89,22 @@ export async function GET(req) {
         }
     }
 
+    let products = {};
     try {
-        if (categoryId && page) {
+        console.log("Fetching products with params:", { sort, categoryId, min, max, search, page, pageSize });
+        if (search) {
+            products = await db.product.findMany({
+                where: {
+                    OR: [
+                        { title: { contains: search, mode: "insensitive" } },
+                        { description: { contains: search, mode: "insensitive" } },
+                    ]
+                },
+                skip: (parseInt(page) - 1) * parseInt(pageSize),
+                take: parseInt(pageSize),
+            });
+        }
+        else if (categoryId && page) {
             if (sort) {
                 products = await db.product.findMany({
                     orderBy: {
@@ -109,6 +124,9 @@ export async function GET(req) {
                     }
                 });
             }
+        } else {
+            // show all products
+            products = await db.product.findMany();
         }
 
         return NextResponse.json(products);

@@ -25,6 +25,7 @@ export default function Paginate({ totalPages }) {
                 ? `?${new URLSearchParams({ page: 1 })}`
                 : `?${new URLSearchParams({ page: parseInt(currentPage) - 1 })}`
             }`}
+            disabled={currentPage == 1}
           />
         </PaginationItem>
         {totalPages <= 3 ? (
@@ -59,23 +60,6 @@ export default function Paginate({ totalPages }) {
             </PaginationItem>
           </>
         )}
-        {/* {totalPages <= 3 ? "" : ""} */}
-        {/* {totalPages <= 3 ? "" : ""} */}
-        {/* <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" isActive>
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem> */}
-
         <PaginationItem>
           <PaginationNext
             href={`${
@@ -83,6 +67,7 @@ export default function Paginate({ totalPages }) {
                 ? `?${new URLSearchParams({ page: totalPages })}`
                 : `?${new URLSearchParams({ page: parseInt(currentPage) + 1 })}`
             }`}
+            disabled={currentPage == totalPages}
           />
         </PaginationItem>
       </PaginationContent>

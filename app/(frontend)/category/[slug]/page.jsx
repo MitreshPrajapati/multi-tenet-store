@@ -5,14 +5,15 @@ import React from "react";
 export default async function page({ params: { slug }, searchParams }) {
   const { sort, min, max } = searchParams;
   const category = await getData(`categories/filter/${slug}`);
+  const page = searchParams.page || 1;
 
   let products;
   if (sort) {
     products = await getData(
-      `products?categoryId=${category.id}&sort=${sort}${max ? "&max=" + max : ""}${min ? "&min=" + min : ""}`
+      `products?categoryId=${category.id}&page=${page}&sort=${sort}${max ? "&max=" + max : ""}${min ? "&min=" + min : ""}`
     );
   } else {
-    products = await getData(`products?categoryId=${category.id}`);
+    products = await getData(`products?categoryId=${category.id}&page=${page}`);
   }
 
   //   const { products } = category;
