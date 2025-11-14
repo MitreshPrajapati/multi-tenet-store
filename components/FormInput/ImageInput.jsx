@@ -1,8 +1,15 @@
-import { UploadDropzone } from "@/lib/uploadThing";
+"use client";
+import dynamic from "next/dynamic";
+
+// import { UploadDropzone } from "@/lib/uploadThing";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
+const UploadDropzone = dynamic(
+  () => import("@/lib/uploadThing").then((mod) => mod.UploadDropzone),
+  { ssr: false }
+);
 
 export default function ImageInput({
   label,
@@ -11,6 +18,7 @@ export default function ImageInput({
   className = "col-span-full",
   endpoint = "categoryImageUploader",
 }) {
+  const [uploading, setUploading] = useState(false);
   return (
     <div className={className}>
       <div className="flex justify-between items-center mb-4">
@@ -42,18 +50,25 @@ export default function ImageInput({
       ) : (
         <UploadDropzone
           endpoint={endpoint}
+          onUploadBegin={() => setUploading(true)}
           onClientUploadComplete={(res) => {
             console.log("Files: ", res);
+            setUploading(false);
             setImageUrl(res[0].url);
             // Do something with the response
             toast.success("Image upload successful.");
-            console.log("Upload Completed");
+            // console.log("Upload Completed");
           }}
           onUploadError={(error) => {
             // Do something with the error.
+            setImageUrl(false);
             toast.error("Image upload failed");
             console.log(`ERROR! ${error.message}`);
           }}
+          // appearance={{
+          //   button: "bg-slate-900 text-white rounded-lg px-4 py-2",
+          //   label: "text-gray-700",
+          // }}
         />
       )}
     </div>

@@ -138,10 +138,15 @@ const Sidebar = ({ showSidebar }) => {
   // }
   if (role === "FARMER") {
     sidebarLinks = [
+      // {
+      //   title: "Customers",
+      //   icon: User2,
+      //   link: "/dashboard/customers",
+      // },
       {
-        title: "Customers",
-        icon: User2,
-        link: "/dashboard/customers",
+        title: "My Orders",
+        icon: Truck,
+        link: "/dashboard/orders",
       },
       {
         title: "Markets",
@@ -158,11 +163,11 @@ const Sidebar = ({ showSidebar }) => {
         icon: Truck,
         link: "/dashboard/sales",
       },
-      {
-        title: "Community",
-        icon: Building2,
-        link: "/dashboard/community",
-      },
+      // {
+      //   title: "Community",
+      //   icon: Building2,
+      //   link: "/dashboard/community",
+      // },
       {
         title: "Wallet",
         icon: CircleDollarSign,
@@ -176,7 +181,7 @@ const Sidebar = ({ showSidebar }) => {
       {
         title: "Settings",
         icon: Settings,
-        link: "/dashboard/settings",
+        link: "/onboarding",
       },
       {
         title: "Online Store",

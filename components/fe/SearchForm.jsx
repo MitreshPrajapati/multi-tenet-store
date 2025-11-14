@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 export const SearchForm = () => {
   const { register, handleSubmit, reset } = useForm();
   const searchParams = useSearchParams();
+  const sort = searchParams.get("sort") || "asc";
+  
   const router = useRouter();
 
   // const {} = searchParams;
@@ -15,7 +17,7 @@ export const SearchForm = () => {
     const { searchQuery } = data;
     console.log("Searching for:", searchQuery);
     reset();
-    router.push(`/search?query=${searchQuery}`);
+    router.push(`/search?query=${searchQuery}&sort=${sort}`);
   };
 
   return (

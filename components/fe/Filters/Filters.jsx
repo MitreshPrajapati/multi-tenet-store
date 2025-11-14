@@ -3,12 +3,12 @@ import React from "react";
 import PriceFilter from "./PriceFilter";
 import BrandFilter from "./BrandFilter";
 
-export default function Filters({slug}) {
+export default function Filters({ slug, isSearch = false }) {
   return (
     <div>
-      <h2>Filters</h2>
-      <PriceFilter slug={slug} />
-      <BrandFilter />
+      <h2 className="font-semibold">Filters</h2>
+      <PriceFilter slug={slug} isSearch={isSearch} />
+      {/* <BrandFilter /> */}
     </div>
   );
 }

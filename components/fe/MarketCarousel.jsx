@@ -69,23 +69,22 @@ const MarketCarousel = ({ markets }) => {
       >
         {markets &&
           markets?.map((market, index) => (
-            <div className="px-4 object-contain ">
+            <div className="px-4 object-contain" key={index}>
               <Link
-                key={index}
-                href="/"
-                className="rounded-lg bg-slate-100 overflow-hidden"
+                href={`/market/${market.slug}`}
+                className="block rounded-lg overflow-hidden hover:cursor-pointer "
               >
                 <Image
                   src={market.logoUrl || "/vegetables.png"}
                   alt="vegetables"
                   width={556}
                   height={556}
-                  className="object-contain max-w-[150px] max-h-[150px] min-w-[150px] min-h-[150px] bg-slate-50 rounded-lg mx-auto"
+                  className="block object-cover max-w-[120px] max-h-[120px] min-w-[120px] min-h-[120px] bg-slate-50 p-2 rounded-full m-auto"
                 />
-                <h2 className="text-slate-800 mt-2 text-center capitalize">
-                  {market.title}
-                </h2>
               </Link>
+              <h2 className="text-slate-50 mt-2 text-center capitalize">
+                {market.title}
+              </h2>
             </div>
           ))}
       </Slider>
@@ -101,7 +100,7 @@ const MarketCarousel = ({ markets }) => {
           className="p-4 bg-slate-600 opacity-50 hover:opacity-80 transition-all delay-100 rounded-full text-slate-50"
           onClick={next}
         >
-          <ChevronRight className="text-white font-bold" />
+          <ChevronRight className="text-white  font-bold" />
         </button>
       </div>
     </div>

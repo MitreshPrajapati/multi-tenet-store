@@ -179,7 +179,8 @@ model UserProfile {
 
 model FarmerProfile {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
+  firstName       String?
+  lastName        String?
   phone           String
   email           String
   farmerCode      String

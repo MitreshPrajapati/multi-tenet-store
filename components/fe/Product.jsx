@@ -16,30 +16,30 @@ const Product = ({ product }) => {
     toast.success(`Item added to cart!`);
   }
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden hover:bg-slate-50 transition-all delay-100">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden hover:bg-slate-50 dark:hover:bg-slate-800 transition-all delay-100">
       <Link
         key={product.slug}
         href={`/products/${product.slug}`}
-        className="bg-white cursor-pointer"
+        className="block cursor-pointer"
       >
         <Image
           src={product.imageUrl || "/vegetables.png"}
           alt={product.title}
           width={556}
           height={556}
-          className="w-full  h-48 object-contain"
+          className="w-full h-32 object-contain"
         />
       </Link>
 
-      <div className="flex flex-col p-4 bg-slate-50">
+      <div className="flex flex-col p-4 ">
         <Link href={`/products/${product.slug}`}>
-          <h2 className="text-slate-800 dark:text-slate-800  text-left font-semibold text-lg">
+          <h2 className="text-slate-800 dark:text-slate-50  text-left font-semibold text-lg">
             {product.title}
           </h2>
         </Link>
 
         <div className="flex justify-between  items-center gap-2  mt-4">
-          <span className="text-slate-800 dark:text-slate-800">
+          <span className="text-slate-800 dark:text-slate-50">
             INR: {product.salePrice}
           </span>
           <button

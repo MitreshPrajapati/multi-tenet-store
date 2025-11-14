@@ -65,13 +65,9 @@ const CommunityCarousel = ({ trainings }) => {
       >
         {trainings &&
           trainings?.map((training, index) => (
-            <div className="px-4">
-              <div className="rounded-lg shadow-md overflow-hidden">
-                <Link
-                  key={index}
-                  href="/"
-                  className=""
-                >
+            <div className="px-4" key={index}>
+              <div className="rounded-lg shadow-md overflow-hidden bg-white dark:bg-slate-800">
+                <Link href="/" className="">
                   <Image
                     src={training.imageUrl || "/profile.jpg"}
                     alt={training.slug}
@@ -82,17 +78,17 @@ const CommunityCarousel = ({ trainings }) => {
                 </Link>
 
                 <div className="flex flex-col p-2">
-                  <h2 className="text-slate-800 mt-2 text-left text-xl font-semibold">
+                  <h2 className="text-slate-800 dark:text-slate-50 mt-2 text-left text-xl font-semibold">
                     {training.title}
                   </h2>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-slate-400 text-sm">
                     {training.description}
                   </p>
                   <div className="w-full flex justify-between items-center mt-6 mb-2">
                     <button className="bg-green-500 hover:bg-green-600 transition-all delay-100 text-white rounded-lg py-2 px-4">
                       Read more
                     </button>
-                    <h2 className="text-slate-800">Talk to Consultant</h2>
+                    <h2 className="text-green-500 ">Talk to Consultant</h2>
                   </div>
                 </div>
               </div>

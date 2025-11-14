@@ -25,7 +25,7 @@ const Home = async () => {
         if (category.products.length) {
           return (
             <div className="py-8" key={index}>
-              <CategoryList category={category} />
+              <CategoryList  category={category} />
             </div>
           );
         }

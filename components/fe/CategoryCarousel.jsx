@@ -10,20 +10,20 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import Product from "./Product";
 
-const CategoryCarousel = ({ products }) => {
+const CategoryCarousel = ({ products, isMarketPage = false }) => {
   const isInfinite = products.length > 1 ? true : false;
   var settings = {
     dots: true,
     infinite: isInfinite,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: isMarketPage ? 3: 4,
     slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: isMarketPage ? 2:3,
           slidesToScroll: 1,
           infinite: true,
           dots: true,

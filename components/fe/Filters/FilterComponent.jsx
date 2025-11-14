@@ -10,7 +10,7 @@ export default function FilterComponent({ category = [], products = [] }) {
   // console.log("category",category.products.length);
   return (
     <div>
-      <div className="bg-white space-y-6 text-slate-900 py-8 px-4  ">
+      <div className="space-y-6 dark:text-slate-50 text-slate-900 py-8 px-4  ">
         <Breadcrumb title={title} resultCount={productCount} />
         <Sorting
           products={products}
@@ -19,13 +19,14 @@ export default function FilterComponent({ category = [], products = [] }) {
           isSearch={category?.isSearch}
         />
       </div>
+      <hr className="border-b-2" />
 
       <div className="grid grid-cols-12 py-8">
         <div className="col-span-3">
-          <Filters slug={slug} />
+          <Filters slug={slug} isSearch={category?.isSearch} />
         </div>
         <div className="col-span-9">
-          <FilteredProducts productCount={productCount} products={products} />
+          <FilteredProducts productCount={productCount} products={products} isSearch={category?.isSearch} />
         </div>
       </div>
     </div>

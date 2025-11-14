@@ -5,6 +5,7 @@ import Paginate from "./Paginate";
 export default async function FilteredProducts({
   products = [],
   productCount,
+  isSearch = false,
 }) {
   const pageSize = 2;
   const totalPages = Math.ceil(productCount / pageSize);
@@ -13,7 +14,7 @@ export default async function FilteredProducts({
     <div>
       <Suspense
         fallback={
-          <div className="text-green-500 text-2xl ">Loading products...</div>
+          <p className="text-green-500 text-2xl ">Loading products...</p>
         }
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 ">
@@ -24,10 +25,11 @@ export default async function FilteredProducts({
         </div>
         {products.length > 0 && (
           <div className="flex justify-between items-center py-8">
-            <Paginate totalPages={totalPages} />
+            <Paginate totalPages={totalPages} isSearch={isSearch} />
           </div>
         )}
       </Suspense>
     </div>
   );
 }
+

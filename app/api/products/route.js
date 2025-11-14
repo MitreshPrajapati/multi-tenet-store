@@ -61,13 +61,13 @@ export async function POST(req) {
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    const sort = searchParams.get('sort');
     const categoryId = searchParams.get('categoryId');
+    const sort = searchParams.get('sort');
     const min = searchParams.get('min');
     const max = searchParams.get('max');
     const search = searchParams.get('search');
-    const pageSize = searchParams.get('pageSize') || 2;
     const page = searchParams.get('page') || 1;
+    const pageSize = searchParams.get('pageSize') || 2;
 
     console.log("categoryId", categoryId, searchParams)
     let where = {

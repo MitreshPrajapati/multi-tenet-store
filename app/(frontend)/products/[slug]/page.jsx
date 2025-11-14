@@ -1,7 +1,8 @@
+import AddToCartButton from "@/components/fe/AddToCartButton";
 import Breadcrumb from "@/components/fe/Breadcrumb";
 import CategoryCarousel from "@/components/fe/CategoryCarousel";
 import { getData } from "@/lib/getData";
-import { Minus, Plus, Send, Share2, Tag } from "lucide-react";
+import { Send, Share2, Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -9,9 +10,14 @@ import React from "react";
 const ProductDetailPage = async ({ params: { slug } }) => {
   const product = await getData(`/products/product/${slug}`);
   const category = await getData(`/categories/${product.categoryId}`);
+  const similarProducts = category.products.filter(
+    (prod) => prod.id !== product.id
+  );
+
   return (
     <div>
       <Breadcrumb />
+
       {product && (
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 md:col-span-6 lg:col-span-3">
@@ -23,6 +29,7 @@ const ProductDetailPage = async ({ params: { slug } }) => {
               className="w-full object-cover"
             />
           </div>
+
           <div className="col-span-12 md:col-span-6 flex flex-col">
             <div className="flex items-center justify-between">
               <h2 className="text-xl lg:text-3xl font-bold">
@@ -32,13 +39,14 @@ const ProductDetailPage = async ({ params: { slug } }) => {
                 <Share2 />
               </button>
             </div>
-            <div className="flex gap-4 items-center">
-              <p>SKU: {product.sku}</p>
+
+            <div className="flex gap-4 items-center mt-4">
+              <p className="text-sm text-slate-200 ">SKU: {product?.sku}</p>
               <p
-                className={`${product.quantity > 0 ? "bg-green-300" : "bg-red-300"} py-2 px-4 rounded-full dark:text-slate-800`}
+                className={`${product.quantity > 0 ? "bg-green-300" : "bg-red-300"} py-1 px-3 rounded-full dark:text-slate-800`}
               >
                 {" "}
-                <b>Stock</b>:{" "}
+                <span className="text-sm font-semibold">Stock</span>:{" "}
                 {product.quantity}
                 {/* {product.quantity > 0 ? "In Stock" : "Out of Stock"} */}
               </p>
@@ -62,21 +70,7 @@ const ProductDetailPage = async ({ params: { slug } }) => {
             <p className="py-8">{product?.description} </p>
 
             <div className="flex justify-between items-center">
-              <div className="flex items-center ">
-                <button className="border py-2 px-4 rounded-tl-lg rounded-bl-lg">
-                  <Minus />
-                </button>
-                <span className="border border-l-0 border-r-0 py-2 px-8 flex-grow ">
-                  {product.quantity}
-                </span>
-                <button className="border py-2 px-4 rounded-tr-lg rounded-br-lg">
-                  <Plus />
-                </button>
-              </div>
-
-              <button className="bg-green-500 text-white py-2 px-4 rounded-lg">
-                Add to Cart
-              </button>
+              <AddToCartButton product={product} />
             </div>
           </div>
 
@@ -156,16 +150,18 @@ const ProductDetailPage = async ({ params: { slug } }) => {
         </div>
       )}
 
-      <div className="w-full mt-6 bg-slate-100 rounded-lg overflow-hidden shadow">
-        <div className="flex justify-between items-center bg-slate-200 px-4 py-2">
-          <h2 className="text-lg font-semibold dark:text-slate-800 capitalize">
-            Similar Products
-          </h2>
+      {similarProducts.length > 0 && (
+        <div className="w-full mt-6 bg-slate-100 dark:text-slate-50 text-slate-800 dark:bg-slate-800 rounded-lg overflow-hidden shadow">
+          <div className="flex justify-between items-center bg-slate-200 dark:bg-slate-800 px-4 py-2">
+            <h2 className="text-lg font-semibold capitalize">
+              Similar Products
+            </h2>
+          </div>
+          <div className="bg-slate-100 dark:bg-slate-700 px-4 pt-4 pb-8">
+            <CategoryCarousel products={similarProducts} />
+          </div>
         </div>
-        <div className="bg-green-100 px-4 pt-4 pb-8">
-          <CategoryCarousel products={category.products} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

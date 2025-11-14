@@ -4,48 +4,61 @@ import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 
 export default function Sorting({ title, slug, isSearch = false }) {
-  // console.log(title, products, "from SORTING")
   const pathname = usePathname();
-  const sort = useSearchParams().get("sort");
+  const searchParams = useSearchParams();
+
+  const sort = searchParams.get("sort") || "";
+  const min = searchParams.get("min") || "";
+  const max = searchParams.get("max") || "";
+  const query = searchParams.get("query") || "";
+
+  // Helper function to build sort URLs dynamically
+  const buildSortUrl = (order) => {
+    const params = new URLSearchParams({
+      ...(isSearch ? { query } : {}),
+      ...(min ? { min } : {}),
+      ...(max ? { max } : {}),
+      ...(order ? { sort: order } : {}),
+    });
+
+    return isSearch
+      ? `?${params.toString()}`
+      : `/category/${slug}?${params.toString()}`;
+  };
+
   const sortingLinks = [
-    {
-      title: "Relevance",
-      href: `/category/${slug}`,
-    },
-    {
-      title: "Price - High to Low",
-      href: `/category/${slug}?sort=desc`,
-    },
-    {
-      title: "Price - Low to High",
-      href: `/category/${slug}?sort=asc`,
-    },
+    { title: "Relevance", order: "" },
+    { title: "Price - High to Low", order: "desc" },
+    { title: "Price - Low to High", order: "asc" },
   ];
 
   return (
-    <div className="flex items-center justify-between">
-      {/* <h2 className="text-2xl">Serarch Results - Electronics</h2> */}
-      <h2 className="text-2xl font-medium ">
-        {isSearch && "Search Results -"} {title}
+    <div className="flex items-center justify-between flex-wrap gap-2">
+      <h2 className="text-2xl font-medium">
+        {isSearch && "Search Results - "} {title}
       </h2>
-      <div className="flex items-center gap-3 text-sm">
-        <p>Sort by:</p>
-        <div className="flex items-center">
-          {sortingLinks?.map((link, idx) => {
-            const actualPath = `${pathname}${sort ? "?sort=" + sort : ""}`;
 
-            console.log(actualPath);
+      <div className="flex items-center gap-2 text-sm">
+        <p className="font-medium">Sort by:</p>
+        <div className="flex items-center">
+          {sortingLinks.map((link, idx) => {
+            const isActive =
+              (link.order === "" && sort === "") ||
+              (link.order === "asc" && sort === "asc") ||
+              (link.order === "desc" && sort === "desc");
+
             return (
               <Link
                 key={idx}
-                className={`${
-                  actualPath === link.href
-                    ? "border-green-400 bg-slate-800  text-green-500"
-                    : " border-slate-500 "
-                } border px-2 py-1 first:rounded-l last:rounded-r`}
-                href={link?.href}
+                href={buildSortUrl(link.order)}
+                className={`border px-3 py-1 transition-colors first:rounded-l last:rounded-r
+                  ${
+                    isActive
+                      ? "border-green-400 bg-green-600 text-white"
+                      : "border-slate-400 hover:bg-slate-700 hover:text-white"
+                  }`}
               >
-                {link?.title}
+                {link.title}
               </Link>
             );
           })}
